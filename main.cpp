@@ -40,12 +40,33 @@ bool isSolved(int grid[N][N]) {
     return true;
 }
 
+//Checks if user has inputted a valid row.
+bool isValidRow(int row) {
+
+    if (row > 9 || row < 1) { //Verifying user input
+        return false;
+    } else {
+        return true;
+    }
+}
+
+//Checks if user has inputted a valid column.
+bool isValidColumn(int col) {
+
+    if (col > 9 || col < 1) { //Verifying user input
+        return false;
+    } else {
+        return true;
+    }
+}
+
 //allows user input to solve the game
 void solveGame(int grid[N][N]) {
 
     int row;
     int col;
     int num;
+    bool isValidPlayingSpot;
 
     cout << "*** Sudoku Game ***" << endl;
     cout << "To play, enter the row and column number for each 0 to input your answer." << endl;
@@ -53,23 +74,35 @@ void solveGame(int grid[N][N]) {
     while (true) {
         printGrid(grid); //calls printGrid function
 
-        //User input for row variable
-        cout << "Enter row:";
-        cin >> row;
-        while (row > 9 || row < 1) { //Verifying user input
-            cout << "Invalid row - please enter a row number between 1 and 9." << endl;
+        do {
+            //User input for row variable
             cout << "Enter row:";
             cin >> row;
-        }
+            while (!(isValidRow(row))) {
+                cout << "Invalid row - please enter a row number between 1 and 9." << endl;
+                cout << "Enter row:";
+                cin >> row;
+            }
 
-        //User input for column variable
-        cout << "Enter column:";
-        cin >> col;
-        while (col > 9 || col < 1) { //Verifying user input
-            cout << "Invalid column - please enter a column number between 1 and 9." << endl;
+            //User input for column variable
             cout << "Enter column:";
             cin >> col;
-        }
+            while (!(isValidColumn(col))) {
+                cout << "Invalid column - please enter a column number between 1 and 9." << endl;
+                cout << "Enter column:";
+                cin >> col;
+            }
+
+            if (grid[row-1][col-1] != 0) {
+                isValidPlayingSpot = false;
+                cout << "You cannot play in this spot!" << endl;
+            } else {
+                isValidPlayingSpot = true;
+            }
+        } while (!isValidPlayingSpot);
+
+
+
 
         //User input for their answer
         cout << "Enter a number:";
@@ -89,7 +122,7 @@ void solveGame(int grid[N][N]) {
             printGrid(grid); //calls function printGrid
             //Asks user if they would like to make any more changes
             cout << "Do you wish to make any more changes? (Yes/No)" << endl;
-            cin >> choice;
+            getline(cin,choice);
 
             //user input to all uppercase
             transform(choice.begin(), choice.end(), choice.begin(), ::toupper);
